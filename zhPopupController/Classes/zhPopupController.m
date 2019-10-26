@@ -9,6 +9,10 @@
 #import "zhPopupController.h"
 #import <objc/runtime.h>
 
+// teanfoo mark [A] 取消Block未显式使用self的警告
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wimplicit-retain-self"
+
 @interface zhPopupController () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong, readonly) UIView *superview;
@@ -556,7 +560,8 @@ static CGFloat zh_randomValue(int i, int j) {
         case zhPopupSlideStyleShrinkInOut1:
             _popupView.transform = _dismissOppositeDirection ?
             CGAffineTransformMakeScale(1.75, 1.75) :
-            CGAffineTransformMakeScale(0.25, 0.25);
+            // teanfoo mark [M] 退出时缩放到0.01，0.25看起来有点卡顿
+            CGAffineTransformMakeScale(0.01, 0.01);// CGAffineTransformMakeScale(0.25, 0.25);
             break;
             
         case zhPopupSlideStyleShrinkInOut2:
@@ -961,3 +966,5 @@ static CGFloat zh_randomValue(int i, int j) {
 }
 
 @end
+// teanfoo mark [A] 取消Block未显式使用self的警告
+#pragma clang diagnostic pop
